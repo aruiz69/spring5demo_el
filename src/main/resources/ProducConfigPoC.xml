@@ -1,0 +1,225 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+>
+
+    <bean id="prestamos" class="com.example.demoEL.conf_copel.TransaccionesSoportadas">
+        <property name="origenDeTransacciones">
+            <map key-type="java.lang.String" value-type="OrigenDeTransaccion">
+                <entry key="SA" value-ref="venta"></entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="venta" class="com.example.demoEL.conf_copel.OrigenDeTransaccion">
+        <property name="tabla" value="TABLA"/>
+        <property name="mapaDeDatos" ref="DataMapProductoSimple"/>
+
+    </bean>
+
+    <bean id="DataMapProductoSimple" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="datoCalculados">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="datCalc1"/>
+                <ref bean="datCalc2Int"/>
+                <ref bean="datCalc2ByBean"/>
+                <ref bean="dataArray"/>
+                <ref bean="dataArrayObjects"/>
+                <ref bean="dataArrayObjectsPassParams"/>
+            </list>
+        </property>
+        <property name="NombreMapeo" value="mpaSalida"/>
+    </bean>
+
+
+    <bean id="datCalc1" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="valoresAdicionales">
+            <list value-type="com.example.demoEL.confTest.AttributeToContext">
+                <ref bean="attToContext"/>
+            </list>
+        </property>
+        <property name="expresionDeCalculo" value="[registroOrigen][entrada1] + ' Wolrd - ' + #variable1" />
+        <property name="atributoCalculado" value="[mpaSalida][salida1]" />
+    </bean>
+
+    <bean id="attToContext" class="com.example.demoEL.confTest.AttributeToContext">
+        <property name="name" value="variable1"/>
+        <property name="expression" value="[myBean].getValue('Eko')" />
+    </bean>
+
+    <bean id="datCalc2Int" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[registroOrigen][entrada2] + 25" />
+        <property name="atributoCalculado" value="[mpaSalida][salida2]" />
+    </bean>
+
+    <bean id="datCalc2ByBean" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + 'concatenated from bean'" />
+        <property name="atributoCalculado" value="[mpaSalida][salida3]" />
+        <property name="datoCalculado" ref="datCalc3Interno"/>
+    </bean>
+
+    <bean id="datCalc3Interno" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + ' Para Salida4'" />
+        <property name="atributoCalculado" value="[mpaSalida][salida4]" />
+    </bean>
+
+    <bean id="dataArray" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[beanForArray].getValuObject()" />
+        <property name="atributoCalculado" value="[mpaSalida][salida5]" />
+    </bean>
+
+    <bean id="dataArrayObjects" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[beanForArray].getNames()" />
+        <property name="atributoCalculado" value="[mpaSalida][salida6]" />
+    </bean>
+
+
+    <bean id="dataArrayObjectsPassParams" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[beanForArray].getNames([registroOrigen][entrada1])" />
+        <property name="atributoCalculado" value="[mpaSalida][salida7]" />
+    </bean>
+
+    <!-- Mapeo con mas de un registro de salida, considerando el mismo registro de entrada-->
+    <bean id="DataMapProductoMultiple" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="mapaDeMultipleSalidas">
+            <list>
+                <ref bean="DataMapProductoSimpleClone"/>
+                <ref bean="DataMapProductoSimpleClone1"/>
+                <ref bean="DataMapProducto3"/>
+            </list>
+        </property>
+        <property name="NombreMapeo" value="mpaSalida1"/>
+    </bean>
+
+    <bean id="DataMapProductoSimpleClone" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="datoCalculados">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="datCalc1Clone"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="DataMapProductoSimpleClone1" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="datoCalculados">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="datCalc1Clone"/>
+                <ref bean="datCalc2Clone"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="datCalc1Clone" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[registroOrigen][entrada1] + ' Wolrd'" />
+        <property name="atributoCalculado" value="[mpaSalida1][salida1]" />
+    </bean>
+
+    <bean id="datCalc2Clone" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + ' Para Salida42'" />
+        <property name="atributoCalculado" value="[mpaSalida1][salida42]" />
+    </bean>
+
+    <bean id="DataMapProducto3" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="datoCalculados">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="datCalc3"/>
+                <ref bean="datCalc31"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="datCalc3" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada1]) + ' Para SalidaA'" />
+        <property name="atributoCalculado" value="[mpaSalida1][salidaA]" />
+    </bean>
+    <bean id="datCalc31" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + ' Para Salida4'" />
+        <property name="atributoCalculado" value="[mpaSalida1][salida4]" />
+    </bean>
+
+    <!--Mapeo de  Estructura compleja 1, simpel mapa agregando un objeto interno en el mapa-->
+
+    <bean id="DataMapProductoComplejo1" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="datoCalculados">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="data1"/>
+                <ref bean="data2t"/>
+                <ref bean="data3ByBean"/>
+            </list>
+        </property>
+        <property name="NombreMapeo" value="mpaSalidaC1"/>
+    </bean>
+
+    <bean id="data1" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[registroOrigen][entrada1] + ' Wolrd'" />
+        <property name="atributoCalculado" value="[mpaSalidaC1][salida1]" />
+        <property name="mapaDeDatosInterno">
+            <list value-type="com.example.demoEL.conf_copel.MapaDeDatos">
+               <ref bean="mapaInterno" />
+                <ref bean="mapaInterno2" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="data2t" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[registroOrigen][entrada2] + 25" />
+        <property name="atributoCalculado" value="[mpaSalidaC1][salida2]" />
+    </bean>
+
+    <bean id="data3ByBean" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + 'concatenated from bean'" />
+        <property name="atributoCalculado" value="[mpaSalidaC1][salida3]" />
+    </bean>
+
+    <bean id="mapaInterno" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="datoCalculados">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="data2-3t"/>
+                <ref bean="data3-3ByBean"/>
+            </list>
+        </property>
+        <property name="NombreMapeo" value="mpaSalida3"/>
+    </bean>
+
+
+    <bean id="data2-3t" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[registroOrigen][entrada2] + 50" />
+        <property name="atributoCalculado" value="[mpaSalida3][salida23]" />
+    </bean>
+
+    <bean id="data3-3ByBean" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + 'concatenated from bean 33'" />
+        <property name="atributoCalculado" value="[mpaSalida3][salida33]" />
+        <property name="datoCalculado" ref="datCalc3-3Interno"/>
+    </bean>
+
+    <bean id="datCalc3-3Interno" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + ' Para Salida4'" />
+        <property name="atributoCalculado" value="[mpaSalida3][salida43]" />
+    </bean>
+
+    <bean id="mapaInterno2" class="com.example.demoEL.conf_copel.MapaDeDatos">
+        <property name="datoCalculados">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="data1-mapaInterno2"/>
+                <ref bean="data1-mapaInterno3"/>
+            </list>
+        </property>
+        <property name="NombreMapeo" value="mpaSalidaMI3"/>
+    </bean>
+
+    <bean id="data1-mapaInterno2" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + ' Para SalidaMI3'" />
+        <property name="atributoCalculado" value="[mpaSalidaMI3][mpaMI1]" />
+    </bean>
+
+
+    <bean id="data1-mapaInterno3" class="com.example.demoEL.conf_copel.DatoCalculado">
+        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada1]) + ' en  SalidaMI3'" />
+        <property name="atributoCalculado" value="[mpaSalidaMI3][mpaMI2]" />
+    </bean>
+    <!--END  Mapeo de  Estructura compleja 1, simpel mapa agregando un objeto interno en el mapa-->
+
+
+
+</beans>

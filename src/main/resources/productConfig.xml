@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+    profile="Product">
+
+    <bean id="confProducto" class="com.example.demoEL.confTest.SyncConf">
+        <property name="productName" value="Prestamo"/>
+        <property name="calcAtt">
+            <list value-type="com.example.demoEL.confTest.CalculationRule">
+                <ref bean="rule1"/>
+                <!--ref bean="rule2"/-->
+                <ref bean="rule3"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="rule1" class="com.example.demoEL.confTest.CalculationRule">
+        <property name="attName" value="[recordDest][Data1]"/>
+        <property name="expression" value="'Hello World'"/>
+        <property name="inner" ref="rule2"/> <!--Composite Rules in same evaluation-->
+    </bean>
+    <bean id="rule2" class="com.example.demoEL.confTest.CalculationRule">
+        <property name="attName" value="[recordDest][Data2]"/>
+        <property name="expression" value="[myBean].getValue([recordOri].data1) + ' Hello World2'"/>
+    </bean>
+
+    <bean id="rule3" class="com.example.demoEL.confTest.CalculationRule">
+        <property name="attName" value="[recordDest][Data3]"/>
+        <property name="attributes">
+            <list value-type="com.example.demoEL.confTest.AttributeToContext">
+                <ref bean="att"/>
+            </list>
+        </property>
+        <property name="expression" value="#myatt"/>
+    </bean>
+
+    <bean id="att" class="com.example.demoEL.confTest.AttributeToContext">
+        <property name="name" value="myatt"/>
+        <property name="expression" value="'Nuevo Data ' + [recordOri].data3"/>
+    </bean>
+
+</beans>
