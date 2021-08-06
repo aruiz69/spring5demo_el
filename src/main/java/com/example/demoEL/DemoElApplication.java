@@ -79,11 +79,16 @@ public class DemoElApplication {
             ObjectMapper mapper = new ObjectMapper();
 
             ClassPathXmlApplicationContext poc = new ClassPathXmlApplicationContext(new String[]{"classpath:ProducConfigPoC.xml"}, ctxt);
+
             Map<String, Object>beansMapPOC = new HashMap<>();
             Map<String, Object>entradaPOC = new HashMap<>();
             entradaPOC.put("entrada1", "Hello");
             entradaPOC.put("entrada2", 25);
             entradaPOC.put("entrada3", "Some Data ");
+           /* List<Record> records = new ArrayList<>();
+            for(int i = 0 ; i < 5 ; i++) {
+                records.add(new Record("Data"+i, "Data2"+i, "Data3"+i));
+            }*/
 
             Arrays.stream(poc.getBeanDefinitionNames())
                     .filter(name -> !name.contains("."))

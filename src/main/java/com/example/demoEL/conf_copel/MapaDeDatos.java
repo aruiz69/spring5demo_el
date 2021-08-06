@@ -27,7 +27,7 @@ public class MapaDeDatos {
      * @return Lista de Mapas, cada entrada corresponde a un registro de salida, de acuerdo a la configuración que se establezca
      */
     public List<Map<String, Object>> aplicarMapaDeDatos(StandardEvaluationContext context) {
-
+        final Object mapa = context.getRootObject().getValue();
         if (mapaDeMultipleSalidas.isEmpty()) {
             mapaDeMultipleSalidas.add(this);
         }
@@ -37,7 +37,6 @@ public class MapaDeDatos {
                         datoCalculados.datoCalculados
                                 .parallelStream()
                                 .reduce(new HashMap<>(), (parRecord, datoCalculado) -> {
-                                    Object mapa = context.getRootObject().getValue();
                                     if (mapa instanceof Map) {
                                         ((Map<String, Object>) mapa).put(getNombreMapeo(), new ConcurrentHashMap<>());
                                     }

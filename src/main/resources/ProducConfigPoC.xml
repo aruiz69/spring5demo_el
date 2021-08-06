@@ -5,7 +5,7 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 >
 
-    <bean id="prestamos" class="com.example.demoEL.conf_copel.TransaccionesSoportadas">
+    <bean id="prestamos" class="com.example.demoEL.conf_copel.ConfiguracionDeExtraccion">
         <property name="origenDeTransacciones">
             <map key-type="java.lang.String" value-type="OrigenDeTransaccion">
                 <entry key="SA" value-ref="venta"></entry>
