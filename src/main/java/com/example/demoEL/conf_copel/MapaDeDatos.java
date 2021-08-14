@@ -33,8 +33,8 @@ public class MapaDeDatos {
         }
         return mapaDeMultipleSalidas
                 .stream()
-                .map(datoCalculados ->
-                        datoCalculados.datoCalculados
+                .map(dataCalculado ->
+                        dataCalculado.datoCalculados
                                 .parallelStream()
                                 .reduce(new HashMap<>(), (parRecord, datoCalculado) -> {
                                     if (mapa instanceof Map) {

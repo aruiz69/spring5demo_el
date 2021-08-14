@@ -50,7 +50,7 @@
     </bean>
 
     <bean id="datCalc2Int" class="com.example.demoEL.conf_copel.DatoCalculado">
-        <property name="expresionDeCalculo" value="[registroOrigen][entrada2] + 25" />
+        <property name="expresionDeCalculo" value="25 + [registroOrigen][entrada2]" />
         <property name="atributoCalculado" value="[mpaSalida][salida2]" />
     </bean>
 
