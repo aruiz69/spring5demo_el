@@ -57,11 +57,15 @@
     <bean id="datCalc2ByBean" class="com.example.demoEL.conf_copel.DatoCalculado">
         <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + 'concatenated from bean'" />
         <property name="atributoCalculado" value="[mpaSalida][salida3]" />
-        <property name="datoCalculado" ref="datCalc3Interno"/>
+        <property name="datosCalculado">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="datCalc3Interno"/>
+            </list>
+        </property>
     </bean>
 
     <bean id="datCalc3Interno" class="com.example.demoEL.conf_copel.DatoCalculado">
-        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + ' Para Salida4'" />
+        <property name="expresionDeCalculo" value="[myBean].getValue([mpaSalida][salida3]) + '--> 3Interno Para Salida4'" />
         <property name="atributoCalculado" value="[mpaSalida][salida4]" />
     </bean>
 
@@ -190,11 +194,15 @@
     <bean id="data3-3ByBean" class="com.example.demoEL.conf_copel.DatoCalculado">
         <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + 'concatenated from bean 33'" />
         <property name="atributoCalculado" value="[mpaSalida3][salida33]" />
-        <property name="datoCalculado" ref="datCalc3-3Interno"/>
+        <property name="datosCalculado">
+            <list value-type="com.example.demoEL.conf_copel.DatoCalculado">
+                <ref bean="datCalc3-3Interno"/>
+            </list>
+        </property>
     </bean>
 
     <bean id="datCalc3-3Interno" class="com.example.demoEL.conf_copel.DatoCalculado">
-        <property name="expresionDeCalculo" value="[myBean].getValue([registroOrigen][entrada3]) + ' Para Salida4'" />
+        <property name="expresionDeCalculo" value="[myBean].getValue([mpaSalida3][salida33]) + ' 33--> Para Salida4'" />
         <property name="atributoCalculado" value="[mpaSalida3][salida43]" />
     </bean>
 

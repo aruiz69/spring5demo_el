@@ -25,7 +25,7 @@ import java.util.Map;
 public class DatoCalculado {
     private String expresionDeCalculo;
     private String atributoCalculado;
-    private DatoCalculado datoCalculado; // Atributo calculado en la misma transacción, opera sobre el mismo mapa
+    private List<DatoCalculado> datosCalculado = new ArrayList<>();
     private List<AttributeToContext> valoresAdicionales = new ArrayList<>();
     private List<MapaDeDatos> mapaDeDatosInterno = null;  // Se considera un objeto complejo a agregarse en el resultado del mapeo,
     // Se considera que regresará solo un objeto complejo, tomando como base el primer mapa que
@@ -50,9 +50,8 @@ public class DatoCalculado {
         parser.parseExpression(atributoCalculado).setValue(context, mapeoResultado);
         Map<String, Object> resultado = parser.parseExpression("[" + nombreMapa + "]").getValue(context, Map.class);
 
-        if (datoCalculado != null) {
-            datoCalculado.aplicarMapa(context, nombreMapa);
-        }
+        datosCalculado.stream()
+                .forEach(datoCalculo -> datoCalculo.aplicarMapa(context, nombreMapa));
 
         if (mapaDeDatosInterno != null) {
             Map<String, Object> mapResult = getStringObjectMap(mapaDeDatosInterno, context);
